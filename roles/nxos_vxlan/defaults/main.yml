@@ -1,0 +1,48 @@
+---
+# Default variables for the nxos_vxlan role
+# VXLAN (Virtual Extensible LAN) tunnels L2 frames over L3 using UDP encapsulation
+# The NVE (Network Virtualization Edge) interface is the VTEP - the tunnel endpoint
+# Applies to: accessleaf, gwleaf, borderleaf
+# Not needed on: distro, core (legacy), spine (no VTEP - just routes EVPN)
+
+# The loopback interface used as the VTEP source IP
+vxlan_vtep_loopback: loopback1000
+
+# Anycast gateway MAC - same on ALL VTEPs so hosts always think their gateway is local
+# This is what makes distributed anycast gateway work in L3VNI
+vxlan_anycast_gateway_mac: null    # Format: xxxx.xxxx.xxxx
+
+# How VTEPs learn MAC/IP reachability
+# bgp = use EVPN control plane (preferred - scales better)
+# flood = use multicast/ingress replication (older method)
+vxlan_host_reachability: bgp
+
+# L2 VNI members - these carry bridged (L2) traffic between VTEPs
+# Each entry maps a VNI to a VLAN
+# suppress_arp: true means VTEPs answer ARP locally using EVPN MAC/IP table
+# bum_method: mcast uses multicast group, bgp uses ingress replication
+vxlan_l2_vnis: []
+
+# L3 VNI members - these carry routed (L3) traffic between VRFs across VTEPs
+# associate_vrf: true means this VNI is tied to a VRF for inter-VRF routing
+vxlan_l3_vnis: []
+
+# EVPN VNI definitions - tells BGP which VNIs to advertise EVPN routes for
+vxlan_evpn_vnis: []
+
+# Example:
+# vxlan_l2_vnis:
+#   - vni: 100100             # Replace with your L2 VNI number
+#     suppress_arp: true
+#     bum_method: mcast
+#     mcast_group: 239.0.0.1  # Replace with your multicast group
+#
+# vxlan_l3_vnis:
+#   - vni: 100001             # Replace with your L3 VNI number
+#     associate_vrf: true
+#
+# vxlan_evpn_vnis:
+#   - vni: 100100             # Replace with your VNI number
+#     rd: auto
+#     route_target_import: auto
+#     route_target_export: auto

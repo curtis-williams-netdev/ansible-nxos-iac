@@ -1,0 +1,22 @@
+---
+# Variables in all.yml apply to every single device in your inventory
+# These are your NX-OS SSH connection settings
+
+# Tells Ansible to use the network CLI connection method (SSH into the device like a human would)
+ansible_connection: ansible.netcommon.network_cli
+
+# Tells Ansible this is a Cisco NX-OS device so it knows which prompts to expect
+ansible_network_os: cisco.nxos.nxos
+
+# Your SSH username for device access
+# Override at runtime with -u <username> if needed (e.g. a service account)
+# Set this to your actual username or pull from environment: ansible_user: "{{ lookup('env', 'ANSIBLE_USER') }}"
+ansible_user: your_username_here
+
+# Password pulled from Ansible Vault - stored encrypted in inventory/group_vars/vault.yml
+# Ansible decrypts it automatically using the password in .vault_pass on the jump server
+# When you get an IDM service account later, just update vault.yml - nothing else changes
+ansible_password: "{{ vault_device_password }}"
+
+# NX-OS doesn't use 'enable' mode like IOS does
+ansible_become: false

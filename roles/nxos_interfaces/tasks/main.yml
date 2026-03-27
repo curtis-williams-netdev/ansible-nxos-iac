@@ -1,0 +1,65 @@
+---
+# nxos_interfaces role - manages physical interfaces, SVIs, loopbacks, port-channels
+# Applies to: all device types
+# Variables: interfaces_l3, interfaces_access, interfaces_trunk,
+#            interfaces_portchannel, interfaces_loopback, interfaces_svi
+
+# TODO: Build out when ready to manage interface configs
+# Modules used:
+#   cisco.nxos.nxos_interfaces    - enable/disable, description, MTU
+#   cisco.nxos.nxos_l2_interfaces - switchport access/trunk config
+#   cisco.nxos.nxos_l3_interfaces - IP address assignment
+#   cisco.nxos.nxos_lag_interfaces - port-channel member assignment
+#   cisco.nxos.nxos_vlans         - SVI creation (vlan interface)
+
+# Example task structure (uncomment and adapt when implementing):
+#
+# - name: Configure L3 routed interfaces
+#   cisco.nxos.nxos_l3_interfaces:
+#     config:
+#       - name: "{{ item.name }}"
+#         ipv4:
+#           - address: "{{ item.ip }}"
+#   loop: "{{ interfaces_l3 }}"
+#   notify: save config
+#
+# - name: Configure loopback interfaces
+#   cisco.nxos.nxos_l3_interfaces:
+#     config:
+#       - name: "{{ item.name }}"
+#         ipv4:
+#           - address: "{{ item.ip }}"
+#   loop: "{{ interfaces_loopback }}"
+#   notify: save config
+#
+# - name: Configure SVIs
+#   cisco.nxos.nxos_l3_interfaces:
+#     config:
+#       - name: "Vlan{{ item.vlan }}"
+#         ipv4:
+#           - address: "{{ item.ip }}"
+#   loop: "{{ interfaces_svi }}"
+#   notify: save config
+#
+# - name: Configure access ports
+#   cisco.nxos.nxos_l2_interfaces:
+#     config:
+#       - name: "{{ item.name }}"
+#         access:
+#           vlan: "{{ item.vlan }}"
+#   loop: "{{ interfaces_access }}"
+#   notify: save config
+#
+# - name: Configure trunk ports
+#   cisco.nxos.nxos_l2_interfaces:
+#     config:
+#       - name: "{{ item.name }}"
+#         trunk:
+#           allowed_vlans: "{{ item.allowed_vlans }}"
+#           native_vlan: "{{ item.native_vlan | default(omit) }}"
+#   loop: "{{ interfaces_trunk }}"
+#   notify: save config
+
+- name: Placeholder - nxos_interfaces tasks coming in a future phase
+  ansible.builtin.debug:
+    msg: "nxos_interfaces role loaded for {{ inventory_hostname }}"

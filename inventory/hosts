@@ -1,0 +1,64 @@
+# inventory/hosts
+# Static inventory file - use this when NetBox is unavailable or for testing
+# In production, replace this with netbox_inventory.py for dynamic inventory
+#
+# Usage:
+#   ansible-playbook -i inventory/hosts playbooks/site.yml
+#   ansible-playbook -i inventory/netbox_inventory.py playbooks/site.yml  (dynamic)
+
+# -------------------------------------------------------------------------
+# Device role groups
+# -------------------------------------------------------------------------
+
+[distro]
+distro-sw01  ansible_host=192.0.2.10
+distro-sw02  ansible_host=192.0.2.11
+
+[core]
+core-sw01  ansible_host=192.0.2.20
+core-sw02  ansible_host=192.0.2.21
+
+[spine]
+spine01  ansible_host=192.0.2.50
+spine02  ansible_host=192.0.2.51
+
+[accessleaf]
+accessleaf01  ansible_host=192.0.2.40
+accessleaf02  ansible_host=192.0.2.41
+
+[gwleaf]
+gwleaf01  ansible_host=192.0.2.30
+gwleaf02  ansible_host=192.0.2.31
+
+[borderleaf]
+borderleaf01  ansible_host=192.0.2.60
+borderleaf02  ansible_host=192.0.2.61
+
+# -------------------------------------------------------------------------
+# lab3 sandbox group (child of role groups - overlapping membership)
+# Devices here belong to BOTH their role group AND lab3
+# group_vars/lab3.yml overrides apply when targeting [lab3]
+# -------------------------------------------------------------------------
+
+[lab3]
+accessleaf01
+accessleaf02
+borderleaf01
+
+# -------------------------------------------------------------------------
+# Platform group - all NX-OS devices
+# group_vars/nxos.yml applies to everything here
+# -------------------------------------------------------------------------
+
+[nxos:children]
+distro
+core
+spine
+accessleaf
+gwleaf
+borderleaf
+
+# -------------------------------------------------------------------------
+# All devices group (Ansible built-in)
+# group_vars/all.yml always applies - no need to list here
+# -------------------------------------------------------------------------

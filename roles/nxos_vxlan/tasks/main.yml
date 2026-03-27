@@ -1,0 +1,62 @@
+---
+# nxos_vxlan role - configures the NVE interface (VTEP) and EVPN VNI definitions
+# Applies to: accessleaf, gwleaf, borderleaf
+# Not needed on: distro, core (legacy), spine (no VTEP)
+# Variables: vxlan_vtep_loopback, vxlan_anycast_gateway_mac, vxlan_host_reachability,
+#            vxlan_l2_vnis, vxlan_l3_vnis, vxlan_evpn_vnis
+
+# TODO: Build out when ready to manage VXLAN configs
+# Modules used:
+#   cisco.nxos.nxos_vxlan_vtep      - NVE interface (source-interface, host-reachability)
+#   cisco.nxos.nxos_vxlan_vtep_vni  - VNI membership under NVE (L2 and L3 VNIs)
+#   cisco.nxos.nxos_evpn_vni        - EVPN VNI definitions (RD, route-target)
+#   cisco.nxos.nxos_feature         - enable nv overlay and evpn features
+
+# Example task structure (uncomment and adapt when implementing):
+#
+# - name: Enable VXLAN features
+#   cisco.nxos.nxos_feature:
+#     feature: "{{ item }}"
+#     state: enabled
+#   loop: "{{ nxos_vxlan_features }}"
+#   notify: save config
+#
+# - name: Configure NVE interface (VTEP)
+#   cisco.nxos.nxos_vxlan_vtep:
+#     interface: nve1
+#     admin_state: up
+#     source_interface: "{{ vxlan_vtep_loopback }}"
+#     host_reachability: "{{ vxlan_host_reachability == 'bgp' }}"
+#   notify: save config
+#
+# - name: Configure L2 VNI memberships
+#   cisco.nxos.nxos_vxlan_vtep_vni:
+#     interface: nve1
+#     vni: "{{ item.vni }}"
+#     assoc_vrf: false
+#     ingress_replication: "{{ 'bgp' if item.bum_method == 'bgp' else omit }}"
+#     multicast_group: "{{ item.mcast_group | default(omit) }}"
+#     suppress_arp: "{{ item.suppress_arp | default(false) }}"
+#   loop: "{{ vxlan_l2_vnis }}"
+#   notify: save config
+#
+# - name: Configure L3 VNI memberships (associate-vrf)
+#   cisco.nxos.nxos_vxlan_vtep_vni:
+#     interface: nve1
+#     vni: "{{ item.vni }}"
+#     assoc_vrf: true
+#   loop: "{{ vxlan_l3_vnis }}"
+#   notify: save config
+#
+# - name: Configure EVPN VNI definitions
+#   cisco.nxos.nxos_evpn_vni:
+#     vni: "{{ item.vni }}"
+#     route_distinguisher: "{{ item.rd | default('auto') }}"
+#     route_target_import: "{{ item.route_target_import | default('auto') }}"
+#     route_target_export: "{{ item.route_target_export | default('auto') }}"
+#   loop: "{{ vxlan_evpn_vnis }}"
+#   notify: save config
+
+- name: Placeholder - nxos_vxlan tasks coming in a future phase
+  ansible.builtin.debug:
+    msg: "nxos_vxlan role loaded for {{ inventory_hostname }}"

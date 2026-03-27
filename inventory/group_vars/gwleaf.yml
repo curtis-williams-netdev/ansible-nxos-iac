@@ -1,0 +1,8 @@
+---
+# Variables specific to gwleaf devices (Gateway Leaf - VTEP that stitches VXLAN fabric to legacy network)
+# In the L2VNI model, gwleaf bridges VLANs to the core (L3 gateway) for routing
+# In the L3VNI model, gwleaf performs local routing within the fabric like accessleaf
+
+device_role: gwleaf
+topology: vxlan_fabric
+vxlan_role: gateway_leaf

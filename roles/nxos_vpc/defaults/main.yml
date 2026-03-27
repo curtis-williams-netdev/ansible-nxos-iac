@@ -1,0 +1,20 @@
+---
+# Default variables for the nxos_vpc role
+# VPC (Virtual Port Channel) provides Layer 2 redundancy between a device pair
+# Applies to: distro, core, accessleaf, gwleaf (not spine or borderleaf)
+
+vpc_domain_id: null                  # VPC domain ID - must match on both peers
+vpc_role_priority: 1                 # Lower = primary. Set 1 on a, 2 on b
+vpc_peer_keepalive_dest: null        # Peer mgmt IP (destination for keepalive)
+vpc_peer_keepalive_src: null         # Local mgmt IP (source for keepalive)
+vpc_peer_gateway: true               # Allow peer to act as gateway for orphan ports
+vpc_auto_recovery: true              # Restore VPC if peer comes back after isolation
+vpc_ip_arp_synchronize: true         # Sync ARP table between peers for faster failover
+vpc_delay_restore: null              # Seconds to wait before restoring VPCs after reload
+vpc_delay_restore_interface_vlan: null  # Seconds to wait before restoring SVIs
+
+# Example (set in host_vars per device - IPs are device-specific):
+# vpc_domain_id: 1
+# vpc_role_priority: 1
+# vpc_peer_keepalive_dest: 192.0.2.2     # peer's mgmt IP - replace with actual
+# vpc_peer_keepalive_src: 192.0.2.1      # my mgmt IP - replace with actual

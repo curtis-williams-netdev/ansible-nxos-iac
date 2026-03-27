@@ -1,0 +1,20 @@
+---
+# Variables that apply specifically to the nxos group
+# This is where you'd put NX-OS-specific settings that differ from defaults
+
+# NX-OS Feature flags - features that need to be enabled on all NX-OS devices
+# These will be used in your base config role later
+nxos_features:
+  - lldp
+  - lacp
+
+# Default NTP servers applied to all NX-OS devices
+ntp_servers:
+  - 0.0.0.0  # Replace with your actual NTP server IPs
+
+# Default DNS servers
+dns_servers:
+  - 0.0.0.0  # Replace with your actual DNS server IPs
+
+# Default syslog server
+syslog_server: "0.0.0.0"  # Replace with your actual syslog server IP

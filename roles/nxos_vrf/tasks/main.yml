@@ -1,0 +1,33 @@
+---
+# nxos_vrf role - configures VRF definitions with L3VNI assignments
+# Applies to: accessleaf, gwleaf, borderleaf (with VNI), core (without VNI)
+# Variables: vrfs (list with name, vni, rd, route_target)
+
+# TODO: Build out when ready to manage VRF configs
+# Modules used:
+#   cisco.nxos.nxos_vrf - VRF name, VNI, RD, route-target
+
+# Example task structure (uncomment and adapt when implementing):
+#
+# - name: Configure VRFs
+#   cisco.nxos.nxos_vrf:
+#     name: "{{ item.name }}"
+#     vni: "{{ item.vni | default(omit) }}"
+#     rd: "{{ item.rd | default(omit) }}"
+#     state: present
+#   loop: "{{ vrfs }}"
+#   notify: save config
+#
+# - name: Configure VRF route-targets
+#   cisco.nxos.nxos_config:
+#     lines:
+#       - "address-family ipv4 unicast"
+#       - "  route-target both {{ item.route_target }}"
+#       - "  route-target both evpn {{ item.route_target }}"
+#     parents: "vrf context {{ item.name }}"
+#   loop: "{{ vrfs | selectattr('route_target', 'defined') | list }}"
+#   notify: save config
+
+- name: Placeholder - nxos_vrf tasks coming in a future phase
+  ansible.builtin.debug:
+    msg: "nxos_vrf role loaded for {{ inventory_hostname }}"

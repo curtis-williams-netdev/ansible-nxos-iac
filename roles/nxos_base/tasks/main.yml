@@ -1,0 +1,74 @@
+---
+# nxos_base role - applies baseline configuration to all NX-OS devices
+# Applies to: all device types
+# Variables: device_hostname, ntp_servers, dns_servers, syslog_server,
+#            nxos_features, radius_servers, aaa_auth_login, banner_motd
+
+# TODO: Build out when ready to manage base configs
+# Modules used:
+#   cisco.nxos.nxos_hostname      - set device hostname
+#   cisco.nxos.nxos_ntp_global    - configure NTP servers and source interface
+#   cisco.nxos.nxos_system        - DNS name-server and domain-name
+#   cisco.nxos.nxos_logging_global - syslog server and severity
+#   cisco.nxos.nxos_feature       - enable/disable NX-OS features
+#   cisco.nxos.nxos_aaa_server    - RADIUS server configuration
+#   cisco.nxos.nxos_banner        - MOTD banner
+#   cisco.nxos.nxos_config        - fallback for config blocks without dedicated module
+
+# Example task structure (uncomment and adapt when implementing):
+#
+# - name: Set hostname
+#   cisco.nxos.nxos_hostname:
+#     config:
+#       hostname: "{{ device_hostname }}"
+#   notify: save config
+#
+# - name: Enable required features
+#   cisco.nxos.nxos_feature:
+#     feature: "{{ item }}"
+#     state: enabled
+#   loop: "{{ nxos_features }}"
+#   notify: save config
+#
+# - name: Configure NTP servers
+#   cisco.nxos.nxos_ntp_global:
+#     config:
+#       servers:
+#         - server: "{{ item }}"
+#           use_vrf: management
+#       source_interface: "{{ ntp_source_interface }}"
+#   loop: "{{ ntp_servers }}"
+#   notify: save config
+#
+# - name: Configure DNS
+#   cisco.nxos.nxos_system:
+#     name_servers: "{{ dns_servers }}"
+#     domain_name: "{{ dns_domain_name }}"
+#   notify: save config
+#
+# - name: Configure syslog
+#   cisco.nxos.nxos_logging_global:
+#     config:
+#       hosts:
+#         - host: "{{ syslog_server }}"
+#           severity: "{{ syslog_severity }}"
+#       origin_id:
+#         hostname: true
+#   notify: save config
+#
+# - name: Configure RADIUS servers
+#   cisco.nxos.nxos_aaa_server:
+#     server_type: radius
+#     global_key: "{{ vault_radius_key }}"
+#   notify: save config
+#
+# - name: Set MOTD banner
+#   cisco.nxos.nxos_banner:
+#     banner: motd
+#     text: "{{ banner_motd }}"
+#     state: present
+#   notify: save config
+
+- name: Placeholder - nxos_base tasks coming in Phase 4
+  ansible.builtin.debug:
+    msg: "nxos_base role loaded for {{ inventory_hostname }}"

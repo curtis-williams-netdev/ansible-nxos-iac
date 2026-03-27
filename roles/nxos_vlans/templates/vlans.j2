@@ -1,0 +1,10 @@
+{# vlans.j2 - Jinja2 template for NX-OS VLAN configuration
+   Variables come from group_vars/<device_type>.yml or host_vars/<hostname>.yml #}
+
+{% for vlan in vlans %}
+vlan {{ vlan.id }}
+  name {{ vlan.name }}
+{% if vlan.vn_segment is defined %}
+  vn-segment {{ vlan.vn_segment }}
+{% endif %}
+{% endfor %}

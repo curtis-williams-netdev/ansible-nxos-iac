@@ -1,0 +1,39 @@
+---
+# site.yml - Master playbook
+# Runs all roles against all devices in order
+# DO NOT run against production until each role is validated in lab first
+
+# Base configuration - applies to every NX-OS device
+- name: Apply base configuration to all NX-OS devices
+  hosts: nxos
+  gather_facts: false
+
+  roles:
+    - nxos_base      # NTP, DNS, SNMP, AAA, RADIUS, VTY, features - Phase 4
+
+# Layer 2 - VLANs and VPC (devices that need it)
+- name: Apply VLAN and VPC configuration
+  hosts: nxos
+  gather_facts: false
+
+  roles:
+    - nxos_vlans    # VLAN definitions and VNI mappings
+    - nxos_vpc      # VPC domain (distro, core, accessleaf, gwleaf only - skip spine/borderleaf)
+
+# Layer 3 underlay - OSPF and BGP (routing devices only)
+- name: Apply underlay routing configuration
+  hosts: nxos
+  gather_facts: false
+
+  roles:
+    - nxos_ospf     # OSPF underlay IGP
+    - nxos_bgp      # BGP - underlay IPv4 unicast + EVPN overlay
+
+# VXLAN overlay - VRFs and NVE interface (VXLAN devices only)
+- name: Apply VXLAN overlay configuration
+  hosts: accessleaf:gwleaf:borderleaf
+  gather_facts: false
+
+  roles:
+    - nxos_vrf      # VRF definitions with L3VNI assignments
+    - nxos_vxlan    # NVE interface, VNI memberships, EVPN config

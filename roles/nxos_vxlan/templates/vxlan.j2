@@ -1,0 +1,37 @@
+{# vxlan.j2 - Jinja2 template for NX-OS VXLAN/NVE configuration
+   Configures the NVE interface (VTEP), VNI memberships, and EVPN definitions
+#}
+
+fabric forwarding anycast-gateway-mac {{ vxlan_anycast_gateway_mac }}
+
+interface nve1
+  no shutdown
+  host-reachability protocol {{ vxlan_host_reachability }}
+  source-interface {{ vxlan_vtep_loopback }}
+
+{# L2 VNIs - bridged traffic #}
+{% for vni in vxlan_l2_vnis %}
+  member vni {{ vni.vni }}
+{% if vni.suppress_arp | default(false) %}
+    suppress-arp
+{% endif %}
+{% if vni.bum_method == 'mcast' %}
+    mcast-group {{ vni.mcast_group }}
+{% elif vni.bum_method == 'bgp' %}
+    ingress-replication protocol bgp
+{% endif %}
+{% endfor %}
+
+{# L3 VNIs - routed traffic between VRFs #}
+{% for vni in vxlan_l3_vnis %}
+  member vni {{ vni.vni }} associate-vrf
+{% endfor %}
+
+{# EVPN VNI definitions - BGP control plane for MAC/IP distribution #}
+evpn
+{% for vni in vxlan_evpn_vnis %}
+  vni {{ vni.vni }} l2
+    rd {{ vni.rd | default('auto') }}
+    route-target import {{ vni.route_target_import | default('auto') }}
+    route-target export {{ vni.route_target_export | default('auto') }}
+{% endfor %}

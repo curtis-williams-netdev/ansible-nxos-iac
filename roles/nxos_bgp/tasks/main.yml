@@ -1,0 +1,53 @@
+---
+# nxos_bgp role - configures BGP for underlay reachability and EVPN control plane
+# Applies to: spine (route reflector), accessleaf, gwleaf, borderleaf, core
+# Not needed on: distro (pure L2, no routing)
+# Variables: bgp_asn, bgp_router_id, bgp_route_reflector, bgp_evpn_enabled,
+#            bgp_peer_templates, bgp_neighbors, bgp_vrfs, bgp_backbone_peers
+
+# TODO: Build out when ready to manage BGP configs
+# Modules used:
+#   cisco.nxos.nxos_bgp_global                     - AS number, router-id, timers
+#   cisco.nxos.nxos_bgp_neighbor_address_family     - per-neighbor address family config
+#   cisco.nxos.nxos_bgp_templates                  - peer templates (reusable neighbor config)
+#   cisco.nxos.nxos_bgp_address_family             - global address family config
+
+# Example task structure (uncomment and adapt when implementing):
+#
+# - name: Configure BGP global settings
+#   cisco.nxos.nxos_bgp_global:
+#     config:
+#       as_number: "{{ bgp_asn }}"
+#       router_id: "{{ bgp_router_id }}"
+#       timers:
+#         keepalive: "{{ bgp_timers_keepalive }}"
+#         holdtime: "{{ bgp_timers_hold }}"
+#     state: merged
+#   notify: save config
+#
+# - name: Configure BGP neighbors
+#   cisco.nxos.nxos_bgp_global:
+#     config:
+#       as_number: "{{ bgp_asn }}"
+#       neighbors:
+#         - neighbor_address: "{{ item.ip }}"
+#           description: "{{ item.description | default(omit) }}"
+#           peer_type: "{{ 'fabric_external' if item.remote_as is defined and item.remote_as != bgp_asn else omit }}"
+#     state: merged
+#   loop: "{{ bgp_neighbors }}"
+#   notify: save config
+#
+# - name: Configure l2vpn evpn address family (EVPN overlay)
+#   cisco.nxos.nxos_bgp_address_family:
+#     config:
+#       as_number: "{{ bgp_asn }}"
+#       address_family:
+#         - afi: l2vpn
+#           safi: evpn
+#     state: merged
+#   when: bgp_evpn_enabled
+#   notify: save config
+
+- name: Placeholder - nxos_bgp tasks coming in a future phase
+  ansible.builtin.debug:
+    msg: "nxos_bgp role loaded for {{ inventory_hostname }}"

@@ -1,0 +1,54 @@
+---
+# host_vars/spine01.yml
+# Per-device variables for a spine switch (BGP route reflector)
+
+# -----------------------------------------------------------------------------
+# Identity
+# -----------------------------------------------------------------------------
+device_hostname: spine01
+ansible_host: 192.0.2.50
+
+# -----------------------------------------------------------------------------
+# Loopbacks
+# -----------------------------------------------------------------------------
+loopback0_ip: 10.0.255.10/32
+
+# -----------------------------------------------------------------------------
+# OSPF
+# -----------------------------------------------------------------------------
+ospf_process_id: 1
+ospf_router_id: 10.0.255.10
+
+# -----------------------------------------------------------------------------
+# BGP
+# -----------------------------------------------------------------------------
+bgp_asn: 65000
+bgp_router_id: 10.0.255.10
+bgp_route_reflector: true
+bgp_evpn_enabled: true
+
+bgp_peer_templates:
+  - name: LEAF
+    update_source: loopback0
+    remote_as: 65000
+    address_families:
+      - name: l2vpn evpn
+        send_community: extended
+        route_reflector_client: true
+
+bgp_neighbors:
+  - ip: 10.0.255.40
+    description: accessleaf01
+    peer_template: LEAF
+  - ip: 10.0.255.41
+    description: accessleaf02
+    peer_template: LEAF
+  - ip: 10.0.255.30
+    description: gwleaf01
+    peer_template: LEAF
+  - ip: 10.0.255.31
+    description: gwleaf02
+    peer_template: LEAF
+  - ip: 10.0.255.60
+    description: borderleaf01
+    peer_template: LEAF

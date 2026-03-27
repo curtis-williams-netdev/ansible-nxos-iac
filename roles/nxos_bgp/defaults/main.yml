@@ -1,0 +1,37 @@
+---
+# Default variables for the nxos_bgp role
+# BGP serves two purposes in this environment:
+#   1. Underlay iBGP between spine/leaf for loopback reachability
+#   2. EVPN control plane (l2vpn evpn address family) for VXLAN MAC/IP distribution
+
+bgp_asn: null                    # Your iBGP AS number - same across all fabric devices
+bgp_router_id: null              # Loopback0 IP
+bgp_timers_keepalive: 10
+bgp_timers_hold: 30
+bgp_maximum_paths: 4
+
+# Set to true on spine - spines are route reflectors for leaf nodes
+bgp_route_reflector: false
+
+# Peer templates - define reusable BGP peer configs
+# Ansible will render these and apply to matching neighbors
+bgp_peer_templates: []
+
+# BGP neighbors in the global table
+bgp_neighbors: []
+
+# Per-VRF BGP config (core, borderleaf)
+bgp_vrfs: []
+
+# Whether to enable the l2vpn evpn address family (VXLAN devices only)
+bgp_evpn_enabled: false
+
+# borderleaf only - external BGP peer (backbone provider)
+bgp_backbone_asn: null
+bgp_backbone_peers: []
+
+# Example bgp_neighbors entry (set in host_vars per device - IPs are device-specific):
+# bgp_neighbors:
+#   - ip: 192.0.2.1           # Replace with actual spine loopback IP
+#     peer_template: SPINE
+#     description: spine01

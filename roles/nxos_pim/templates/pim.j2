@@ -1,0 +1,12 @@
+{# pim.j2 - NX-OS PIM sparse-mode configuration template #}
+
+{% if pim_enabled %}
+feature pim
+
+ip pim rp-address {{ pim_rp_address }} group-list {{ pim_group_range }}
+
+{% for intf in pim_interfaces | default([]) %}
+interface {{ intf.name }}
+  ip pim sparse-mode
+{% endfor %}
+{% endif %}

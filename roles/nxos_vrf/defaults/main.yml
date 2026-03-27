@@ -1,0 +1,22 @@
+---
+# Default variables for the nxos_vrf role
+# In L3VNI VXLAN, each VRF gets a VNI assigned - this is what allows traffic
+# from different VRFs to be routed across the VXLAN fabric without leaving it
+# Applies to: accessleaf, gwleaf, borderleaf (VXLAN devices with L3 routing)
+# core uses VRFs too but without VNIs (legacy L3 gateway model)
+
+vrfs: []
+
+# Example:
+# vrfs:
+#   - name: ZONE_A            # Replace with your VRF name
+#     vni: 100001             # Replace with your L3 VNI number
+#     rd: auto                # Route distinguisher
+#     route_target: auto      # Use 'auto' or specify manually
+#     evpn: true              # Enable EVPN route-target for this VRF
+#
+#   - name: ZONE_B            # Replace with your VRF name
+#     vni: 100002             # Replace with your L3 VNI number
+#     rd: auto
+#     route_target: auto
+#     evpn: true

@@ -1,0 +1,14 @@
+{# ospf.j2 - Jinja2 template for NX-OS OSPF underlay configuration #}
+
+router ospf {{ ospf_process_id }}
+{% if ospf_router_id %}
+  router-id {{ ospf_router_id }}
+{% endif %}
+{% if ospf_max_metric_on_startup %}
+  max-metric router-lsa on-startup
+{% endif %}
+  maximum-paths {{ ospf_maximum_paths }}
+  auto-cost reference-bandwidth {{ ospf_reference_bandwidth }}
+{% for vrf in ospf_vrfs %}
+  vrf {{ vrf.name }}
+{% endfor %}

@@ -1,0 +1,77 @@
+{# interfaces.j2 - NX-OS interface configuration template #}
+
+{# Loopback interfaces #}
+{% for intf in interfaces_loopback | default([]) %}
+interface {{ intf.name }}
+  description {{ intf.description | default('') }}
+  ip address {{ intf.ip }}
+  no shutdown
+{% endfor %}
+
+{# L3 routed interfaces #}
+{% for intf in interfaces_l3 | default([]) %}
+interface {{ intf.name }}
+  description {{ intf.description | default('') }}
+  no switchport
+  ip address {{ intf.ip }}
+  mtu {{ intf.mtu | default(interface_default_mtu) }}
+{% if intf.ospf_area is defined %}
+  ip router ospf {{ ospf_process_id }} area {{ intf.ospf_area }}
+{% endif %}
+  no shutdown
+{% endfor %}
+
+{# Port-channel interfaces #}
+{% for pc in interfaces_portchannel | default([]) %}
+interface {{ pc.name }}
+  description {{ pc.description | default('') }}
+{% if pc.type == 'trunk' %}
+  switchport mode trunk
+  switchport trunk allowed vlan {{ pc.allowed_vlans | default('1-4094') }}
+{% elif pc.type == 'access' %}
+  switchport mode access
+  switchport access vlan {{ pc.vlan }}
+{% endif %}
+  no shutdown
+{% for member in pc.members | default([]) %}
+interface {{ member }}
+  channel-group {{ pc.name | regex_replace('[^0-9]', '') }} mode {{ pc.mode | default('active') }}
+  no shutdown
+{% endfor %}
+{% endfor %}
+
+{# L2 trunk interfaces #}
+{% for intf in interfaces_trunk | default([]) %}
+interface {{ intf.name }}
+  description {{ intf.description | default('') }}
+  switchport mode trunk
+  switchport trunk allowed vlan {{ intf.allowed_vlans | default('1-4094') }}
+{% if intf.native_vlan is defined %}
+  switchport trunk native vlan {{ intf.native_vlan }}
+{% endif %}
+  no shutdown
+{% endfor %}
+
+{# L2 access interfaces #}
+{% for intf in interfaces_access | default([]) %}
+interface {{ intf.name }}
+  description {{ intf.description | default('') }}
+  switchport mode access
+  switchport access vlan {{ intf.vlan }}
+  spanning-tree port type edge
+  no shutdown
+{% endfor %}
+
+{# SVIs #}
+{% for svi in interfaces_svi | default([]) %}
+interface Vlan{{ svi.vlan }}
+  description {{ svi.description | default('') }}
+{% if svi.vrf is defined %}
+  vrf member {{ svi.vrf }}
+{% endif %}
+  ip address {{ svi.ip }}
+{% if svi.fabric_forwarding_anycast | default(false) %}
+  fabric forwarding mode anycast-gateway
+{% endif %}
+  no shutdown
+{% endfor %}

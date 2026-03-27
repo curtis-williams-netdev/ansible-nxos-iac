@@ -1,0 +1,17 @@
+---
+# Default variables for the nxos_vlans role
+# Override these in group_vars or host_vars per device type
+
+# List of VLANs to configure on this device
+# Each entry: {id: <vlan_id>, name: <vlan_name>}
+# For VXLAN devices also include: vn_segment: <vni_id>
+vlans: []
+
+# Example:
+# vlans:
+#   - id: 100                 # Replace with your VLAN ID
+#     name: ZONE_A_HOSTS      # Replace with your VLAN name
+#     vn_segment: 100100      # Replace with your VNI (VXLAN devices only)
+#   - id: 200
+#     name: ZONE_B_HOSTS
+#     vn_segment: 100200

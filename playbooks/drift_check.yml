@@ -1,0 +1,16 @@
+---
+# drift_check.yml - Configuration drift detection playbook
+# Phase 6 - Compares running device config against your Ansible desired state
+# Will be scheduled via GitHub Actions to run daily
+
+# TODO: Phase 6 - Will use nxos_config module with 'diff' to detect
+# any changes made directly on devices via CLI that don't match your Ansible source of truth
+
+- name: Placeholder - drift detection coming in Phase 6
+  hosts: nxos
+  gather_facts: false
+
+  tasks:
+    - name: Drift check not yet implemented
+      ansible.builtin.debug:
+        msg: "Drift check for {{ inventory_hostname }} - coming in Phase 6"

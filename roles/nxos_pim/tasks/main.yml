@@ -1,0 +1,39 @@
+---
+# nxos_pim role - configures PIM sparse-mode for multicast BUM replication
+# Applies to: spine, accessleaf, gwleaf, borderleaf (any device in the VXLAN underlay)
+# Only needed when vxlan_l2_vnis use bum_method: mcast instead of bgp ingress-replication
+
+# TODO: Build out when ready to manage PIM configs
+# Modules used:
+#   cisco.nxos.nxos_pim            - global PIM config
+#   cisco.nxos.nxos_pim_rp_address - static RP configuration
+#   cisco.nxos.nxos_pim_interface  - per-interface PIM sparse-mode
+
+# Example task structure (uncomment and adapt when implementing):
+#
+# - name: Enable PIM feature
+#   cisco.nxos.nxos_feature:
+#     feature: pim
+#     state: enabled
+#   when: pim_enabled
+#   notify: save config
+#
+# - name: Configure PIM RP address
+#   cisco.nxos.nxos_pim_rp_address:
+#     rp_address: "{{ pim_rp_address }}"
+#     group_list: "{{ pim_group_range }}"
+#     state: present
+#   when: pim_enabled and pim_rp_address is not none
+#   notify: save config
+#
+# - name: Enable PIM sparse-mode on fabric interfaces
+#   cisco.nxos.nxos_pim_interface:
+#     interface: "{{ item.name }}"
+#     sparse: true
+#   loop: "{{ pim_interfaces }}"
+#   when: pim_enabled
+#   notify: save config
+
+- name: Placeholder - nxos_pim tasks coming in a future phase
+  ansible.builtin.debug:
+    msg: "nxos_pim role loaded for {{ inventory_hostname }}"

@@ -1,0 +1,113 @@
+---
+# host_vars/borderleaf01.yml
+# Per-device variables for a border leaf (L3VNI fabric edge, external connectivity)
+
+# -----------------------------------------------------------------------------
+# Identity
+# -----------------------------------------------------------------------------
+device_hostname: borderleaf01
+ansible_host: 192.0.2.60
+
+# -----------------------------------------------------------------------------
+# Loopbacks
+# -----------------------------------------------------------------------------
+loopback0_ip: 10.0.255.60/32
+loopback1000_ip: 10.0.253.60/32
+
+# -----------------------------------------------------------------------------
+# OSPF
+# -----------------------------------------------------------------------------
+ospf_process_id: 1
+ospf_router_id: 10.0.255.60
+
+# -----------------------------------------------------------------------------
+# BGP
+# -----------------------------------------------------------------------------
+bgp_asn: 65000
+bgp_router_id: 10.0.255.60
+bgp_evpn_enabled: true
+
+bgp_neighbors:
+  - ip: 10.0.255.10
+    description: spine01
+    peer_template: SPINE
+  - ip: 10.0.255.11
+    description: spine02
+    peer_template: SPINE
+
+bgp_backbone_asn: 64999
+bgp_backbone_peers:
+  - ip: 203.0.113.1
+    description: upstream-router
+    remote_as: 64999
+
+bgp_vrfs:
+  - name: ZONE_A
+    rd: "10.0.255.60:1"
+    neighbors:
+      - ip: 203.0.113.1
+        remote_as: 64999
+        description: upstream-ZONE_A
+    networks:
+      - prefix: 10.0.100.0/24
+  - name: ZONE_B
+    rd: "10.0.255.60:2"
+    neighbors:
+      - ip: 203.0.113.2
+        remote_as: 64999
+        description: upstream-ZONE_B
+    networks:
+      - prefix: 10.0.200.0/24
+
+# -----------------------------------------------------------------------------
+# VLANs
+# -----------------------------------------------------------------------------
+vlans:
+  - id: 100
+    name: ZONE_A_HOSTS
+    vn_segment: 100100
+  - id: 200
+    name: ZONE_B_HOSTS
+    vn_segment: 100200
+
+# -----------------------------------------------------------------------------
+# VRFs
+# -----------------------------------------------------------------------------
+vrfs:
+  - name: ZONE_A
+    vni: 100001
+    rd: "10.0.255.60:1"
+    route_target: "65000:100001"
+  - name: ZONE_B
+    vni: 100002
+    rd: "10.0.255.60:2"
+    route_target: "65000:100002"
+
+# -----------------------------------------------------------------------------
+# VXLAN
+# -----------------------------------------------------------------------------
+vxlan_vtep_loopback: loopback1000
+vxlan_anycast_gateway_mac: "0001.0001.0001"
+vxlan_host_reachability: bgp
+
+vxlan_l2_vnis:
+  - vni: 100100
+    suppress_arp: true
+    bum_method: bgp
+  - vni: 100200
+    suppress_arp: true
+    bum_method: bgp
+
+vxlan_l3_vnis:
+  - vni: 100001
+  - vni: 100002
+
+vxlan_evpn_vnis:
+  - vni: 100100
+    rd: auto
+    route_target_import: auto
+    route_target_export: auto
+  - vni: 100200
+    rd: auto
+    route_target_import: auto
+    route_target_export: auto

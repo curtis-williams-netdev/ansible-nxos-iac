@@ -1,0 +1,31 @@
+---
+# ci.yml - GitHub Actions CI/CD pipeline
+# Phase 7 - Automates linting and deployment when you push to GitHub
+# This file tells GitHub what to do automatically when code is pushed
+
+# TODO: Phase 7 - Will include:
+#   - ansible-lint on every pull request (catch errors before they hit devices)
+#   - Automated drift check on a daily schedule
+#   - Deployment gate: only push to prod after lab3 succeeds
+
+name: NX-OS IaC Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * *'  # Runs drift check daily at 6am UTC
+
+jobs:
+  lint:
+    name: Ansible Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@v24
+        # Phase 7 - will be fully configured

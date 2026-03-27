@@ -1,0 +1,17 @@
+---
+# Ansible Collections are pre-built packages of modules, plugins, and roles
+# Think of them like pip packages but for Ansible
+# Install everything here by running: ansible-galaxy collection install -r requirements.yml
+
+collections:
+  # Cisco's official NX-OS collection - gives you all the nxos_* modules
+  - name: cisco.nxos
+    version: ">=4.0.0"
+
+  # Required by cisco.nxos for network device SSH connections
+  - name: ansible.netcommon
+    version: ">=5.0.0"
+
+  # Utilities collection - used for things like ip_addr filters in templates
+  - name: ansible.utils
+    version: ">=2.0.0"

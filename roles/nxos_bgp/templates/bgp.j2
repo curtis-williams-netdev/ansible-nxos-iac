@@ -1,0 +1,64 @@
+{# bgp.j2 - Jinja2 template for NX-OS BGP configuration
+   Covers both underlay IPv4 unicast and EVPN overlay (l2vpn evpn) #}
+
+router bgp {{ bgp_asn }}
+  router-id {{ bgp_router_id }}
+  timers bgp {{ bgp_timers_keepalive }} {{ bgp_timers_hold }}
+  address-family ipv4 unicast
+    maximum-paths {{ bgp_maximum_paths }}
+{% if bgp_evpn_enabled %}
+  address-family l2vpn evpn
+    maximum-paths {{ bgp_maximum_paths }}
+{% if bgp_route_reflector %}
+    retain route-target all
+{% endif %}
+{% endif %}
+
+{% for template in bgp_peer_templates %}
+  template peer {{ template.name }}
+    remote-as {{ template.remote_as }}
+{% if template.update_source is defined %}
+    update-source {{ template.update_source }}
+{% endif %}
+{% if template.bfd | default(false) %}
+    bfd
+{% endif %}
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+{% if template.route_reflector_client | default(false) %}
+      route-reflector-client
+{% endif %}
+      soft-reconfiguration inbound always
+{% if bgp_evpn_enabled %}
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+{% if template.route_reflector_client | default(false) %}
+      route-reflector-client
+{% endif %}
+{% endif %}
+{% endfor %}
+
+{% for neighbor in bgp_neighbors %}
+  neighbor {{ neighbor.ip }}
+{% if neighbor.peer_template is defined %}
+    inherit peer {{ neighbor.peer_template }}
+{% endif %}
+{% if neighbor.description is defined %}
+    description {{ neighbor.description }}
+{% endif %}
+{% endfor %}
+
+{% for vrf in bgp_vrfs %}
+  vrf {{ vrf.name }}
+    address-family ipv4 unicast
+{% if vrf.networks is defined %}
+{% for network in vrf.networks %}
+      network {{ network }}
+{% endfor %}
+{% endif %}
+{% if vrf.advertise_evpn | default(false) %}
+      advertise l2vpn evpn
+{% endif %}
+{% endfor %}

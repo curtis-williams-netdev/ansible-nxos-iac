@@ -1,0 +1,9 @@
+---
+# Variables specific to distro devices (legacy L2 spanning tree distribution switches)
+# These override or extend the values set in all.yml and nxos.yml
+
+device_role: distro
+topology: legacy_stp
+
+# STP-specific settings for distro devices
+stp_mode: rapid-pvst  # or mst depending on your environment

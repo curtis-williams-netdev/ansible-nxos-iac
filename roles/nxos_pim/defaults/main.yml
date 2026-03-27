@@ -1,0 +1,30 @@
+---
+# Default variables for the nxos_pim role
+# PIM sparse-mode is used for multicast BUM (Broadcast, Unknown unicast, Multicast)
+# traffic replication in VXLAN fabrics that use multicast instead of ingress-replication
+
+# Enable PIM globally
+pim_enabled: false
+
+# Rendezvous Point (RP) address - central meeting point for multicast groups
+# All PIM routers must know the RP address to join/leave multicast groups
+pim_rp_address: null            # Replace with actual RP address
+
+# Interface to source PIM hellos from (typically Loopback0)
+pim_source_interface: loopback0
+
+# Multicast group range that uses this RP (matches mcast-group in VXLAN VNI config)
+pim_group_range: "239.0.0.0/8"  # RFC 2365 private multicast range
+
+# Interfaces to enable PIM sparse-mode on
+# Typically all fabric-facing L3 interfaces (uplinks between spine/leaf)
+pim_interfaces: []
+# Example:
+# pim_interfaces:
+#   - name: Ethernet1/1
+#   - name: Ethernet1/2
+#   - name: loopback0
+
+# Auto-RP or BSR (Bootstrap Router) for dynamic RP distribution
+# Set to static if using a manually configured RP address
+pim_rp_mode: static             # static | auto-rp | bsr

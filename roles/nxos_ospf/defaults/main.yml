@@ -1,0 +1,22 @@
+---
+# Default variables for the nxos_ospf role
+# OSPF is the underlay IGP - it builds reachability between loopbacks
+# Used by VXLAN devices (spine, accessleaf, gwleaf, borderleaf) and core
+# distro does not run OSPF (pure L2)
+
+ospf_process_id: 1
+ospf_router_id: null                        # Defaults to loopback0 IP if null
+ospf_reference_bandwidth: "400 Gbps"        # Normalize cost across all link speeds
+ospf_maximum_paths: 4                       # ECMP - use all available paths
+ospf_max_metric_on_startup: true            # Advertise max metric on startup to prevent
+                                            # traffic blackholing before routes converge
+
+# VRFs to enable OSPF in (for core and borderleaf which route per-VRF)
+# Leave empty for spine/accessleaf/gwleaf which only run OSPF in the global table
+ospf_vrfs: []
+
+# Example:
+# ospf_vrfs:
+#   - name: ZONE_A            # Replace with your VRF names
+#   - name: ZONE_B
+#   - name: ZONE_C

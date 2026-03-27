@@ -1,0 +1,38 @@
+---
+# host_vars/distro-sw01.yml
+# Per-device variables for a distribution switch (legacy STP topology)
+# These override anything set in group_vars/distro.yml or group_vars/nxos.yml
+
+# -----------------------------------------------------------------------------
+# Identity
+# -----------------------------------------------------------------------------
+device_hostname: distro-sw01
+ansible_host: 192.0.2.10
+
+# -----------------------------------------------------------------------------
+# VPC
+# -----------------------------------------------------------------------------
+vpc_domain_id: 10
+vpc_role_priority: 100
+vpc_peer_keepalive_dest: 192.0.2.11
+vpc_peer_keepalive_src: 192.0.2.10
+vpc_peer_gateway: true
+vpc_auto_recovery: true
+vpc_delay_restore: 150
+vpc_ip_arp_synchronize: true
+
+# -----------------------------------------------------------------------------
+# VLANs
+# -----------------------------------------------------------------------------
+vlans:
+  - id: 100
+    name: ZONE_A_HOSTS
+  - id: 200
+    name: ZONE_B_HOSTS
+  - id: 999
+    name: NATIVE_UNTAGGED
+
+# -----------------------------------------------------------------------------
+# STP
+# -----------------------------------------------------------------------------
+stp_root_primary_vlans: "1-4094"

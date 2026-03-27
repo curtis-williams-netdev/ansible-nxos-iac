@@ -1,0 +1,7 @@
+---
+# Variables specific to spine devices (VXLAN fabric spine switches)
+# Spines are the BGP route reflectors for the VXLAN fabric - they do not terminate VXLAN tunnels
+
+device_role: spine
+topology: vxlan_fabric
+vxlan_role: spine

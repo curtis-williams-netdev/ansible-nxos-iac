@@ -1,0 +1,6 @@
+---
+# Variables specific to accessleaf devices (VXLAN fabric access leaves - host-facing)
+
+device_role: accessleaf
+topology: vxlan_fabric
+vxlan_role: access_leaf

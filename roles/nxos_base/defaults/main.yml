@@ -1,0 +1,108 @@
+---
+# Default variables for the nxos_base role
+# These apply to all NX-OS devices regardless of role
+# Override per device type in group_vars/ or per device in host_vars/
+
+# -----------------------------------------------------------------------------
+# Hostname
+# -----------------------------------------------------------------------------
+# Set in host_vars per device - no default makes sense here
+device_hostname: null
+
+# -----------------------------------------------------------------------------
+# NTP
+# -----------------------------------------------------------------------------
+# List of NTP servers - override in group_vars/nxos.yml or lab group_vars
+ntp_servers:
+  - 0.0.0.0   # Replace with actual NTP server IP
+
+ntp_source_interface: mgmt0   # Interface NTP packets originate from
+
+# -----------------------------------------------------------------------------
+# DNS
+# -----------------------------------------------------------------------------
+dns_servers:
+  - 0.0.0.0   # Replace with actual DNS server IP
+
+dns_domain_name: example.local   # Replace with actual domain name
+
+# -----------------------------------------------------------------------------
+# Syslog
+# -----------------------------------------------------------------------------
+syslog_server: 0.0.0.0          # Replace with actual syslog server IP
+syslog_severity: informational   # emergencies/alerts/critical/errors/warnings/notifications/informational/debugging
+syslog_source_interface: mgmt0
+
+# -----------------------------------------------------------------------------
+# SNMP
+# -----------------------------------------------------------------------------
+snmp_community_ro: null          # Read-only community string (store in vault)
+snmp_location: "DataCenter"      # Physical location string
+snmp_contact: "netops@example.com"
+snmp_trap_source: mgmt0          # Interface SNMP traps originate from
+snmp_trap_servers: []            # List of SNMP trap receiver IPs
+# Example:
+# snmp_trap_servers:
+#   - 0.0.0.0
+
+# -----------------------------------------------------------------------------
+# RADIUS / AAA
+# -----------------------------------------------------------------------------
+# RADIUS is used for device authentication - falls back to local only when
+# RADIUS is unreachable (not on auth failure)
+radius_servers: []
+# Example:
+# radius_servers:
+#   - host: 0.0.0.0
+#     key: "{{ vault_radius_key }}"   # Encrypt with ansible-vault
+#     auth_port: 1812
+#     acct_port: 1813
+#     timeout: 5
+#     retransmit: 3
+
+radius_source_interface: mgmt0
+
+# AAA authentication order: RADIUS first, local fallback only if RADIUS down
+aaa_auth_login: "group radius local"
+aaa_auth_enable: "group radius local"
+
+# -----------------------------------------------------------------------------
+# VTY (SSH access)
+# -----------------------------------------------------------------------------
+vty_access_class: null           # ACL name to restrict SSH source IPs (optional)
+vty_exec_timeout_minutes: 10
+vty_exec_timeout_seconds: 0
+vty_lines: "0 15"               # VTY line range
+
+# -----------------------------------------------------------------------------
+# Banner
+# -----------------------------------------------------------------------------
+# MOTD banner shown at login - customize for your organization
+banner_motd: |
+  **************************************************************************
+  *  AUTHORIZED ACCESS ONLY                                                *
+  *  Unauthorized access is prohibited and may be subject to prosecution.  *
+  **************************************************************************
+
+# -----------------------------------------------------------------------------
+# NX-OS Features
+# -----------------------------------------------------------------------------
+# Features to enable globally on all devices
+# These are safe defaults - role-specific features added per role
+nxos_features:
+  - lldp
+  - lacp
+  - interface-vlan
+
+# Features enabled only on VXLAN devices (accessleaf, gwleaf, borderleaf)
+nxos_vxlan_features:
+  - vn-segment-vlan-based
+  - nv overlay
+  - evpn
+
+# -----------------------------------------------------------------------------
+# Logging
+# -----------------------------------------------------------------------------
+logging_buffer_size: 65535
+logging_console: "critical"
+logging_monitor: "informational"

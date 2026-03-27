@@ -1,0 +1,5 @@
+---
+# Variables specific to core devices (L3 gateway - shared between legacy STP and VXLAN fabric)
+
+device_role: core
+topology: shared  # core serves both the legacy STP network and VXLAN fabric as L3 gateway

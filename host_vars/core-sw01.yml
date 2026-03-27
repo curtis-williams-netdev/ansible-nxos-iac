@@ -1,0 +1,61 @@
+---
+# host_vars/core-sw01.yml
+# Per-device variables for a core switch (L3 gateway, legacy topology)
+
+# -----------------------------------------------------------------------------
+# Identity
+# -----------------------------------------------------------------------------
+device_hostname: core-sw01
+ansible_host: 192.0.2.20
+
+# -----------------------------------------------------------------------------
+# VPC
+# -----------------------------------------------------------------------------
+vpc_domain_id: 20
+vpc_role_priority: 100
+vpc_peer_keepalive_dest: 192.0.2.21
+vpc_peer_keepalive_src: 192.0.2.20
+vpc_peer_gateway: true
+vpc_auto_recovery: true
+vpc_delay_restore: 150
+vpc_ip_arp_synchronize: true
+
+# -----------------------------------------------------------------------------
+# VLANs and SVIs
+# -----------------------------------------------------------------------------
+vlans:
+  - id: 100
+    name: ZONE_A_HOSTS
+  - id: 200
+    name: ZONE_B_HOSTS
+
+svis:
+  - vlan: 100
+    ip: 10.0.100.2/24
+    vrrp_group: 100
+    vrrp_vip: 10.0.100.1
+    vrrp_priority: 110
+  - vlan: 200
+    ip: 10.0.200.2/24
+    vrrp_group: 200
+    vrrp_vip: 10.0.200.1
+    vrrp_priority: 110
+
+# -----------------------------------------------------------------------------
+# OSPF
+# -----------------------------------------------------------------------------
+ospf_process_id: 1
+ospf_router_id: 10.0.255.20
+
+# -----------------------------------------------------------------------------
+# BGP
+# -----------------------------------------------------------------------------
+bgp_asn: 65000
+bgp_router_id: 10.0.255.20
+bgp_neighbors:
+  - ip: 10.0.255.30
+    description: gwleaf01
+    peer_template: LEAF
+  - ip: 10.0.255.31
+    description: gwleaf02
+    peer_template: LEAF

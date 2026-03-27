@@ -1,0 +1,35 @@
+---
+# lab3.yml - Sandbox playbook
+# Always validate here before running site.yml against production
+# Targets only devices with lab3 in the hostname
+
+- name: Apply base configuration to lab3 sandbox devices
+  hosts: lab3
+  gather_facts: false
+
+  roles:
+    - nxos_base
+
+- name: Apply VLAN and VPC configuration to lab3 devices
+  hosts: lab3
+  gather_facts: false
+
+  roles:
+    - nxos_vlans
+    - nxos_vpc
+
+- name: Apply underlay routing to lab3 devices
+  hosts: lab3
+  gather_facts: false
+
+  roles:
+    - nxos_ospf
+    - nxos_bgp
+
+- name: Apply VXLAN overlay to lab3 VXLAN devices
+  hosts: lab3:&accessleaf:lab3:&gwleaf:lab3:&borderleaf
+  gather_facts: false
+
+  roles:
+    - nxos_vrf
+    - nxos_vxlan

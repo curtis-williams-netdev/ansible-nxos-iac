@@ -1,0 +1,33 @@
+---
+# nxos_vlans role - configures VLANs and VLAN-to-VNI mappings
+# Applies to: distro, core, accessleaf, gwleaf, borderleaf
+# Not needed on: spine (no host-facing VLANs)
+# Variables: vlans (list with id, name, vn_segment)
+
+# TODO: Build out when ready to manage VLAN configs
+# Modules used:
+#   cisco.nxos.nxos_vlans - create VLANs with name and vn-segment mapping
+
+# Example task structure (uncomment and adapt when implementing):
+#
+# - name: Configure VLANs
+#   cisco.nxos.nxos_vlans:
+#     config:
+#       - vlan_id: "{{ item.id }}"
+#         name: "{{ item.name }}"
+#         mapped_vni: "{{ item.vn_segment | default(omit) }}"
+#     state: merged
+#   loop: "{{ vlans }}"
+#   notify: save config
+#
+# - name: Remove undefined VLANs (enforce desired state)
+#   cisco.nxos.nxos_vlans:
+#     config:
+#       - vlan_id: "{{ item.id }}"
+#     state: deleted
+#   loop: "{{ vlans_to_remove | default([]) }}"
+#   notify: save config
+
+- name: Placeholder - nxos_vlans tasks coming in a future phase
+  ansible.builtin.debug:
+    msg: "nxos_vlans role loaded for {{ inventory_hostname }}"

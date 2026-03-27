@@ -1,0 +1,48 @@
+---
+# nxos_ospf role - configures OSPF underlay IGP
+# Applies to: spine, accessleaf, gwleaf, borderleaf, core
+# Not needed on: distro (pure L2, no routing)
+# Variables: ospf_process_id, ospf_router_id, ospf_reference_bandwidth,
+#            ospf_maximum_paths, ospf_max_metric_on_startup, ospf_vrfs
+
+# TODO: Build out when ready to manage OSPF configs
+# Modules used:
+#   cisco.nxos.nxos_ospfv2 - OSPF process, router-id, timers, address families
+#   cisco.nxos.nxos_ospf_interfaces - per-interface OSPF area assignment
+
+# Example task structure (uncomment and adapt when implementing):
+#
+# - name: Configure OSPF process
+#   cisco.nxos.nxos_ospfv2:
+#     config:
+#       processes:
+#         - process_id: "{{ ospf_process_id }}"
+#           router_id: "{{ ospf_router_id }}"
+#           auto_cost:
+#             reference_bandwidth: "{{ ospf_reference_bandwidth }}"
+#             unit: Gbps
+#           maximum_paths: "{{ ospf_maximum_paths }}"
+#           max_metric:
+#             router_lsa:
+#               on_startup:
+#                 set: "{{ ospf_max_metric_on_startup }}"
+#     state: merged
+#   notify: save config
+#
+# - name: Configure OSPF on fabric interfaces
+#   cisco.nxos.nxos_ospf_interfaces:
+#     config:
+#       - name: "{{ item.name }}"
+#         address_family:
+#           - afi: ipv4
+#             processes:
+#               - process_id: "{{ ospf_process_id }}"
+#                 area:
+#                   area_id: "{{ item.ospf_area }}"
+#     state: merged
+#   loop: "{{ interfaces_l3 | selectattr('ospf_area', 'defined') | list }}"
+#   notify: save config
+
+- name: Placeholder - nxos_ospf tasks coming in a future phase
+  ansible.builtin.debug:
+    msg: "nxos_ospf role loaded for {{ inventory_hostname }}"

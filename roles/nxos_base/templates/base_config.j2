@@ -1,0 +1,24 @@
+{# base_config.j2 - Jinja2 template for NX-OS base configuration
+   Variables like {{ hostname }} come from your inventory/group_vars files
+   This template will be rendered per-device and pushed by Ansible
+   Phase 4 - will be fully built out when we do config push #}
+
+hostname {{ inventory_hostname }}
+
+{# NTP Configuration #}
+{% for server in ntp_servers %}
+ntp server {{ server }}
+{% endfor %}
+
+{# DNS Configuration #}
+{% for server in dns_servers %}
+ip name-server {{ server }}
+{% endfor %}
+
+{# Syslog Configuration #}
+logging server {{ syslog_server }}
+
+{# Enable required features #}
+{% for feature in nxos_features %}
+feature {{ feature }}
+{% endfor %}

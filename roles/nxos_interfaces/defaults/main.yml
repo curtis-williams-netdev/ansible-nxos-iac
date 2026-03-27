@@ -1,0 +1,70 @@
+---
+# Default variables for the nxos_interfaces role
+# Manages physical interfaces, SVIs, loopbacks, and port-channels
+
+# L3 routed interfaces (point-to-point uplinks between fabric devices)
+interfaces_l3: []
+# Example:
+# interfaces_l3:
+#   - name: Ethernet1/1
+#     description: uplink-to-spine01
+#     ip: 10.0.1.1/31
+#     mtu: 9216
+#     ospf_area: 0.0.0.0       # optional - enables OSPF on this interface
+
+# L2 access interfaces (host-facing ports)
+interfaces_access: []
+# Example:
+# interfaces_access:
+#   - name: Ethernet1/10
+#     description: server-rack-a
+#     vlan: 100
+
+# L2 trunk interfaces (uplinks between switches)
+interfaces_trunk: []
+# Example:
+# interfaces_trunk:
+#   - name: Ethernet1/1
+#     description: uplink-to-distro
+#     allowed_vlans: "100,200,999"
+#     native_vlan: 999
+
+# Port-channel (LAG/LACP) interfaces
+interfaces_portchannel: []
+# Example:
+# interfaces_portchannel:
+#   - name: port-channel10
+#     description: vpc-peer-link
+#     members:
+#       - Ethernet1/53
+#       - Ethernet1/54
+#     mode: active             # LACP mode: active or passive
+#     type: trunk
+#     allowed_vlans: "1-4094"
+
+# Loopback interfaces
+interfaces_loopback: []
+# Example:
+# interfaces_loopback:
+#   - name: loopback0
+#     description: router-id
+#     ip: 10.0.255.40/32
+#   - name: loopback1000
+#     description: vtep-source
+#     ip: 10.0.253.40/32
+
+# SVI (Switched Virtual Interface) - L3 gateway per VLAN
+interfaces_svi: []
+# Example:
+# interfaces_svi:
+#   - vlan: 100
+#     description: ZONE_A_GATEWAY
+#     ip: 10.0.100.1/24
+#     vrf: ZONE_A
+#     fabric_forwarding_anycast: true   # Enable anycast gateway on this SVI
+
+# Default MTU for fabric-facing interfaces (jumbo frames for VXLAN overhead)
+interface_default_mtu: 9216
+
+# Default MTU for host-facing access ports
+interface_access_mtu: 1500

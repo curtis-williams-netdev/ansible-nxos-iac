@@ -1,0 +1,15 @@
+---
+# Variables specific to borderleaf devices (Border Leaf Router)
+# The borderleaf is the L3VNI fabric edge - connects the VXLAN fabric to the backbone/internet
+# Runs NX-OS 10.x (newer than other device types which run 9.x)
+
+device_role: borderleaf
+topology: vxlan_fabric
+vxlan_role: border_leaf
+
+# borderleaf peers externally to the backbone - set per device in host_vars
+# backbone_asn: null          # External BGP AS number of backbone provider
+# backbone_peers: []          # List of backbone BGP peer IPs
+
+# borderleaf peers with firewalls per VRF using link-local addresses
+# firewall_asn: null          # BGP AS number of the firewall cluster

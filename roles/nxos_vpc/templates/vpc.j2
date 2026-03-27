@@ -1,0 +1,21 @@
+{# vpc.j2 - Jinja2 template for NX-OS VPC domain configuration
+   vpc_domain_id, vpc_peer_keepalive_dest/src are set in host_vars per device #}
+
+vpc domain {{ vpc_domain_id }}
+  role priority {{ vpc_role_priority }}
+  peer-keepalive destination {{ vpc_peer_keepalive_dest }} source {{ vpc_peer_keepalive_src }}
+{% if vpc_peer_gateway %}
+  peer-gateway
+{% endif %}
+{% if vpc_auto_recovery %}
+  auto-recovery
+{% endif %}
+{% if vpc_delay_restore is not none %}
+  delay restore {{ vpc_delay_restore }}
+{% endif %}
+{% if vpc_delay_restore_interface_vlan is not none %}
+  delay restore interface-vlan {{ vpc_delay_restore_interface_vlan }}
+{% endif %}
+{% if vpc_ip_arp_synchronize %}
+  ip arp synchronize
+{% endif %}

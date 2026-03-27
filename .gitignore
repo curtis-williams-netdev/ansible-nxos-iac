@@ -1,0 +1,21 @@
+# Ansible Vault password file - NEVER commit this under any circumstances
+# This file is the key that decrypts your credentials - treat it like a password
+.vault_pass
+*.vault_pass
+
+# Environment variable files - contain secrets
+.env
+
+# Ansible retry files - created when a playbook partially fails
+*.retry
+
+# Python cache
+__pycache__/
+*.pyc
+
+# VS Code settings (optional - remove if you want to share editor settings with your team)
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db

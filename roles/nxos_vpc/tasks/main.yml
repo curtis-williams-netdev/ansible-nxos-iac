@@ -1,0 +1,35 @@
+---
+# nxos_vpc role - configures VPC domain for Layer 2 redundancy between device pairs
+# Applies to: distro, core, accessleaf, gwleaf
+# Not needed on: spine (routed only), borderleaf (standalone)
+# Variables: vpc_domain_id, vpc_role_priority, vpc_peer_keepalive_dest/src,
+#            vpc_peer_gateway, vpc_auto_recovery, vpc_delay_restore
+
+# TODO: Build out when ready to manage VPC configs
+# Modules used:
+#   cisco.nxos.nxos_config - VPC domain config (no dedicated module in cisco.nxos)
+#   cisco.nxos.nxos_feature - enable vpc feature
+
+# Example task structure (uncomment and adapt when implementing):
+#
+# - name: Enable VPC feature
+#   cisco.nxos.nxos_feature:
+#     feature: vpc
+#     state: enabled
+#   notify: save config
+#
+# - name: Configure VPC domain
+#   cisco.nxos.nxos_config:
+#     lines:
+#       - "role priority {{ vpc_role_priority }}"
+#       - "peer-keepalive destination {{ vpc_peer_keepalive_dest }} source {{ vpc_peer_keepalive_src }}"
+#       - "{% if vpc_peer_gateway %}peer-gateway{% endif %}"
+#       - "{% if vpc_auto_recovery %}auto-recovery{% endif %}"
+#       - "delay restore {{ vpc_delay_restore }}"
+#       - "{% if vpc_ip_arp_synchronize %}ip arp synchronize{% endif %}"
+#     parents: "vpc domain {{ vpc_domain_id }}"
+#   notify: save config
+
+- name: Placeholder - nxos_vpc tasks coming in a future phase
+  ansible.builtin.debug:
+    msg: "nxos_vpc role loaded for {{ inventory_hostname }}"

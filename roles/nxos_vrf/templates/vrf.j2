@@ -1,0 +1,19 @@
+{# vrf.j2 - Jinja2 template for NX-OS VRF configuration with L3VNI
+   Each VRF maps to a security zone (one VRF per traffic type/zone)
+   The vni assigned here is the L3 VNI - routes traffic between VTEPs at Layer 3 #}
+
+{% for vrf in vrfs %}
+vrf context {{ vrf.name }}
+{% if vrf.vni is defined %}
+  vni {{ vrf.vni }}
+{% endif %}
+{% if vrf.rd is defined %}
+  rd {{ vrf.rd }}
+{% endif %}
+{% if vrf.evpn | default(false) %}
+  address-family ipv4 unicast
+    route-target both {{ vrf.route_target | default('auto') }} evpn
+  address-family ipv6 unicast
+    route-target both {{ vrf.route_target | default('auto') }} evpn
+{% endif %}
+{% endfor %}

@@ -1,0 +1,5 @@
+---
+- name: save config
+  cisco.nxos.nxos_command:
+    commands: copy running-config startup-config
+  listen: save config
