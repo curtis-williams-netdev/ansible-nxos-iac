@@ -14,7 +14,7 @@ Configuration (environment variables):
 
 Usage:
   ansible-playbook -i inventory/netbox_inventory.py playbooks/site.yml
-  ansible-playbook -i inventory/netbox_inventory.py playbooks/lab3.yml
+  ansible-playbook -i inventory/netbox_inventory.py playbooks/lab.yml
 
 Test:
   python3 inventory/netbox_inventory.py --list
@@ -55,8 +55,8 @@ ROLE_GROUP_MAP = {
 NXOS_PLATFORM_SLUG = "cisco-nxos"
 
 # Name pattern used to identify lab/sandbox devices
-# Devices whose hostname contains this string are added to the lab3 group
-LAB_NAME_PATTERN = "lab3"
+# Devices whose hostname contains this string are added to the lab group
+LAB_NAME_PATTERN = "lab"
 
 
 # ---------------------------------------------------------------------------
@@ -118,7 +118,7 @@ def build_inventory(devices):
     Inventory structure:
       - One group per device role (distro, core, spine, etc.)
       - nxos group contains all role groups as children
-      - lab3 group contains devices matching LAB_NAME_PATTERN
+      - lab group contains devices matching LAB_NAME_PATTERN
       - _meta hostvars contains per-host variables
 
     Returns a dict matching Ansible dynamic inventory spec.
@@ -133,7 +133,7 @@ def build_inventory(devices):
         "nxos": {
             "children": list(ROLE_GROUP_MAP.values())
         },
-        "lab3": {
+        "lab": {
             "hosts": []
         }
     }
@@ -158,9 +158,9 @@ def build_inventory(devices):
         if group:
             inventory[group]["hosts"].append(hostname)
 
-        # Add to lab3 if hostname matches lab pattern
+        # Add to lab if hostname matches lab pattern
         if LAB_NAME_PATTERN in hostname.lower():
-            inventory["lab3"]["hosts"].append(hostname)
+            inventory["lab"]["hosts"].append(hostname)
 
         # Build per-host vars
         hostvars = {}

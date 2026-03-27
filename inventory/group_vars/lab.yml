@@ -1,0 +1,7 @@
+---
+# Variables specific to lab devices (sandbox environment)
+# lab is a child group - devices here also belong to their role group (distro, accessleaf, etc.)
+# Variables here override parent group vars when targeting lab
+
+environment: lab
+# You can override things like syslog/NTP to point to lab servers instead of prod

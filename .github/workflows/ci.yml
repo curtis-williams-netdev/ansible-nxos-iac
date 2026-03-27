@@ -6,7 +6,7 @@
 # TODO: Phase 7 - Will include:
 #   - ansible-lint on every pull request (catch errors before they hit devices)
 #   - Automated drift check on a daily schedule
-#   - Deployment gate: only push to prod after lab3 succeeds
+#   - Deployment gate: only push to prod after lab succeeds
 
 name: NX-OS IaC Pipeline
 

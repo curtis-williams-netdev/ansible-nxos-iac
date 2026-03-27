@@ -35,12 +35,12 @@ borderleaf01  ansible_host=192.0.2.60
 borderleaf02  ansible_host=192.0.2.61
 
 # -------------------------------------------------------------------------
-# lab3 sandbox group (child of role groups - overlapping membership)
-# Devices here belong to BOTH their role group AND lab3
-# group_vars/lab3.yml overrides apply when targeting [lab3]
+# lab sandbox group (child of role groups - overlapping membership)
+# Devices here belong to BOTH their role group AND lab
+# group_vars/lab.yml overrides apply when targeting [lab]
 # -------------------------------------------------------------------------
 
-[lab3]
+[lab]
 accessleaf01
 accessleaf02
 borderleaf01

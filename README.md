@@ -36,7 +36,7 @@ Designed to enforce configuration consistency across all device types using role
 │       ├── accessleaf.yml          # accessleaf group vars
 │       ├── gwleaf.yml              # gwleaf group vars
 │       ├── borderleaf.yml          # borderleaf group vars
-│       └── lab3.yml                # lab/sandbox overrides
+│       └── lab.yml                # lab/sandbox overrides
 ├── host_vars/
 │   ├── distro-sw01.yml             # Per-device variable example (distro)
 │   ├── core-sw01.yml               # Per-device variable example (core)
@@ -56,7 +56,7 @@ Designed to enforce configuration consistency across all device types using role
 │   └── nxos_pim/                   # PIM sparse-mode for multicast BUM
 ├── playbooks/
 │   ├── site.yml                    # Full config push - all devices
-│   ├── lab3.yml                    # Lab/sandbox only
+│   ├── lab.yml                    # Lab/sandbox only
 │   └── drift_check.yml             # Ansible-based drift detection
 ├── scripts/
 │   ├── generate_configs.py         # Render Jinja2 templates locally (no SSH)
@@ -112,7 +112,7 @@ Edit `inventory/hosts` with your actual device hostnames and management IPs.
 ```bash
 export NETBOX_URL=https://netbox.example.com
 export NETBOX_TOKEN=your_api_token
-ansible-playbook -i inventory/netbox_inventory.py playbooks/lab3.yml
+ansible-playbook -i inventory/netbox_inventory.py playbooks/lab.yml
 ```
 
 ### 4. Add host_vars for each device
@@ -133,7 +133,7 @@ Copy an example from `host_vars/` and fill in real values for each device:
 ansible-playbook -i inventory/hosts playbooks/site.yml
 
 # Lab/sandbox only
-ansible-playbook -i inventory/hosts playbooks/lab3.yml
+ansible-playbook -i inventory/hosts playbooks/lab.yml
 
 # Specific device
 ansible-playbook -i inventory/hosts playbooks/site.yml --limit accessleaf01
@@ -200,7 +200,7 @@ Ansible applies variables in this order (later = higher priority):
 group_vars/all.yml
   → group_vars/nxos.yml
     → group_vars/<role_group>.yml   (distro, core, spine, etc.)
-      → group_vars/lab3.yml         (lab devices only)
+      → group_vars/lab.yml         (lab devices only)
         → host_vars/<device>.yml    (device-specific, highest)
 ```
 
@@ -214,8 +214,8 @@ Role `defaults/main.yml` provides fallback values when nothing else sets a varia
 |---|---|---|
 | 1 | Project skeleton, roles, templates, playbooks | Complete |
 | 2 | NetBox dynamic inventory | Complete (needs env vars) |
-| 3 | SSH connectivity test to lab3 devices | Pending |
-| 4 | Build out nxos_base tasks, push base config to lab3 | Pending |
+| 3 | SSH connectivity test to lab devices | Pending |
+| 4 | Build out nxos_base tasks, push base config to lab | Pending |
 | 5 | Config push for all roles, validation | Pending |
 | 6 | Drift detection (drift_check.yml + drift_check.py) | Pending |
 | 7 | GitHub Actions CI/CD pipeline | Pending |
